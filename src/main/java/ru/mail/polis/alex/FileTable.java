@@ -12,12 +12,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-import static ru.mail.polis.alex.Constants.ALIVE;
-import static ru.mail.polis.alex.Constants.DEAD;
-import static ru.mail.polis.alex.Constants.PREFIX;
-import static ru.mail.polis.alex.Constants.SUFFIX;
-import static ru.mail.polis.alex.Constants.TOMBSTONE;
-
 class FileTable implements Closeable {
     private final int count;
     private final int fileIndex;
@@ -32,7 +26,7 @@ class FileTable implements Closeable {
     FileTable(@NotNull final File file) throws IOException {
         this.fileIndex = Integer.parseInt(file
                 .getName()
-                .substring(PREFIX.length(), file.getName().length() - SUFFIX.length()));
+                .substring(Constants.PREFIX.length(), file.getName().length() - Constants.SUFFIX.length()));
         this.fc = openRead(file);
         final ByteBuffer countBB = ByteBuffer.allocate(Integer.BYTES);
         fc.read(countBB, fc.size() - Integer.BYTES);
@@ -131,8 +125,8 @@ class FileTable implements Closeable {
         offset += Integer.BYTES;
 
         //Value
-        if (status == DEAD) {
-            return Row.of(fileIndex, keyBB.slice(), TOMBSTONE, status);
+        if (status == Constants.DEAD) {
+            return Row.of(fileIndex, keyBB.slice(), Constants.TOMBSTONE, status);
         } else {
             final ByteBuffer valueBB = readByteBuffer(offset);
             return Row.of(fileIndex, keyBB.slice(), valueBB.slice(), status);
@@ -163,9 +157,9 @@ class FileTable implements Closeable {
 
                 //Value
                 if (row.isDead()) {
-                    offset += fileChannel.write(Bytes.fromInt(DEAD));
+                    offset += fileChannel.write(Bytes.fromInt(Constants.DEAD));
                 } else {
-                    offset += fileChannel.write(Bytes.fromInt(ALIVE));
+                    offset += fileChannel.write(Bytes.fromInt(Constants.ALIVE));
                     offset += writeByteBuffer(fileChannel, row.getValue()); // row.getValue().getData()
                 }
             }

@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,13 +12,16 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
-import static ru.mail.polis.alex.Constants.*;
+import static ru.mail.polis.alex.Constants.ALIVE;
+import static ru.mail.polis.alex.Constants.DEAD;
+import static ru.mail.polis.alex.Constants.PREFIX;
+import static ru.mail.polis.alex.Constants.SUFFIX;
+import static ru.mail.polis.alex.Constants.TOMBSTONE;
 
 class FileTable implements Closeable {
     private final int count;
     private final int fileIndex;
     private final FileChannel fc;
-    private final File file;
 
     /**
      * Creates an object that is a file on disk, with the ability to create an iterator on this file.
@@ -28,7 +30,6 @@ class FileTable implements Closeable {
      * @throws IOException if an I/O error is thrown by a read method
      */
     FileTable(@NotNull final File file) throws IOException {
-        this.file = file;
         this.fileIndex = Integer.parseInt(file
                 .getName()
                 .substring(PREFIX.length(), file.getName().length() - SUFFIX.length()));

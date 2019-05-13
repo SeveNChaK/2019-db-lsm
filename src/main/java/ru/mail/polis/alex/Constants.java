@@ -3,6 +3,9 @@ package ru.mail.polis.alex;
 import java.nio.ByteBuffer;
 
 class Constants {
+    private Constants() {
+    }
+
     static final ByteBuffer TOMBSTONE = ByteBuffer.allocate(0);
     static final int ALIVE = 1;
     static final int DEAD = 0;

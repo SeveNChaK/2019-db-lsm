@@ -26,7 +26,13 @@ import ru.mail.polis.DAO;
 import ru.mail.polis.Iters;
 import ru.mail.polis.Record;
 
-import static ru.mail.polis.alex.Constants.*;
+import static ru.mail.polis.alex.Constants.ALIVE;
+import static ru.mail.polis.alex.Constants.DEAD;
+import static ru.mail.polis.alex.Constants.LINK_SIZE;
+import static ru.mail.polis.alex.Constants.NUMBER_FIELDS_BYTE_BUFFER;
+import static ru.mail.polis.alex.Constants.PREFIX;
+import static ru.mail.polis.alex.Constants.SUFFIX;
+import static ru.mail.polis.alex.Constants.TOMBSTONE;
 
 public class AlexDAO implements DAO {
     private final SortedMap<ByteBuffer, Row> memTable = new TreeMap<>();
@@ -144,7 +150,7 @@ public class AlexDAO implements DAO {
      * @param tableIterators collection MyTableIterator
      * @return Row iterator
      */
-    static Iterator<Row> getActualRowIterator(@NotNull final Collection<Iterator<Row>> tableIterators) {
+    private static Iterator<Row> getActualRowIterator(@NotNull final Collection<Iterator<Row>> tableIterators) {
         final Iterator<Row> mergingTableIterator = Iterators.mergeSorted(tableIterators, Row::compareTo);
         final Iterator<Row> collapsedIterator = Iters.collapseEquals(mergingTableIterator, Row::getKey);
         return Iterators.filter(collapsedIterator, row -> !row.isDead());

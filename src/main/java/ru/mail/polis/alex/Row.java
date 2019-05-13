@@ -6,7 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 import ru.mail.polis.Record;
 
-import static ru.mail.polis.alex.Constants.*;
+import static ru.mail.polis.alex.Constants.DEAD;
+import static ru.mail.polis.alex.Constants.TOMBSTONE;
 
 final class Row implements Comparable<Row> {
     private final int index;

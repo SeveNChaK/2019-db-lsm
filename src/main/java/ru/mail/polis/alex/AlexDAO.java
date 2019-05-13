@@ -82,8 +82,8 @@ public class AlexDAO implements DAO {
     public void upsert(@NotNull final ByteBuffer key, @NotNull final ByteBuffer value) throws IOException {
         memTable.put(key, Row.of(currentFileIndex, key, value, Constants.ALIVE));
         currentHeap += Integer.BYTES
-                + (long) (key.remaining() + Constants.LINK_SIZE + Integer.BYTES * Constants.NUMBER_FIELDS_BYTE_BUFFER)
-                + (long) (value.remaining() + Constants.LINK_SIZE + Integer.BYTES * Constants.NUMBER_FIELDS_BYTE_BUFFER)
+                + (long) (key.remaining() + Constants.LINK_SIZE + Integer.BYTES * Constants.NUMBER_FIELDS_BYTE_BUF)
+                + (long) (value.remaining() + Constants.LINK_SIZE + Integer.BYTES * Constants.NUMBER_FIELDS_BYTE_BUF)
                 + Integer.BYTES;
         checkHeap();
     }
@@ -101,8 +101,8 @@ public class AlexDAO implements DAO {
         final Row removedRow = memTable.put(key, Row.of(currentFileIndex, key, Constants.TOMBSTONE, Constants.DEAD));
         if (removedRow == null) {
             currentHeap += Integer.BYTES
-                    + (long) (key.remaining() + Constants.LINK_SIZE + Integer.BYTES * Constants.NUMBER_FIELDS_BYTE_BUFFER)
-                    + (long) (Constants.LINK_SIZE + Integer.BYTES * Constants.NUMBER_FIELDS_BYTE_BUFFER)
+                    + (long) (key.remaining() + Constants.LINK_SIZE + Integer.BYTES * Constants.NUMBER_FIELDS_BYTE_BUF)
+                    + (long) (Constants.LINK_SIZE + Integer.BYTES * Constants.NUMBER_FIELDS_BYTE_BUF)
                     + Integer.BYTES;
         } else if (!removedRow.isDead()) {
             currentHeap -= removedRow.getValue().remaining();

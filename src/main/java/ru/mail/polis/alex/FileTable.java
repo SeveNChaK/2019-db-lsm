@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,6 +17,7 @@ class FileTable implements Closeable {
     private final int count;
     private final int fileIndex;
     private final FileChannel fc;
+    private final File file;
 
     /**
      * Creates an object that is a file on disk, with the ability to create an iterator on this file.
@@ -24,6 +26,7 @@ class FileTable implements Closeable {
      * @throws IOException if an I/O error is thrown by a read method
      */
     FileTable(@NotNull final File file) throws IOException {
+        this.file = file;
         this.fileIndex = Integer.parseInt(file
                 .getName()
                 .substring(Constants.PREFIX.length(), file.getName().length() - Constants.SUFFIX.length()));
@@ -168,6 +171,10 @@ class FileTable implements Closeable {
             }
             fileChannel.write(Bytes.fromInt(offsets.size()));
         }
+    }
+
+    void delete() throws IOException {
+        Files.delete(file.toPath());
     }
 
     private static int writeByteBuffer(@NotNull final FileChannel fileChannel, @NotNull final ByteBuffer buffer)

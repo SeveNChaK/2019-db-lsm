@@ -128,12 +128,9 @@ public class AlexDAO implements DAO {
         }
     }
 
-    /**
-     * Perform compaction.
-     */
     @Override
     public void compact() throws IOException {
-        //в разработке
+        Compaction.compactFile(rootDir, tables);
     }
 
     /**
@@ -142,7 +139,7 @@ public class AlexDAO implements DAO {
      * @param tableIterators collection MyTableIterator
      * @return Row iterator
      */
-    private static Iterator<Row> getActualRowIterator(@NotNull final Collection<Iterator<Row>> tableIterators) {
+    static Iterator<Row> getActualRowIterator(@NotNull final Collection<Iterator<Row>> tableIterators) {
         final Iterator<Row> mergingTableIterator = Iterators.mergeSorted(tableIterators, Row::compareTo);
         final Iterator<Row> collapsedIterator = Iters.collapseEquals(mergingTableIterator, Row::getKey);
         return Iterators.filter(collapsedIterator, row -> !row.isDead());

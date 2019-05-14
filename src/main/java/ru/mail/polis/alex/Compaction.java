@@ -22,21 +22,21 @@ final class Compaction {
 
     static void compactFile(@NotNull final File rootDir,
             @NotNull final Collection<FileTable> fileTables) throws IOException {
-        List<Iterator<Row>> tableIterators = new LinkedList<>();
-        for (FileTable ft : fileTables) {
+        final List<Iterator<Row>> tableIterators = new LinkedList<>();
+        for (final FileTable ft : fileTables) {
             tableIterators.add(ft.iterator(MIN_KEY));
         }
-        Iterator<Row> rowIterator = AlexDAO.getActualRowIterator(tableIterators);
-        String fileName = Constants.PREFIX + START_FILE_INDEX + TMP;
-        File resultFile = new File(rootDir, fileName);
+        final Iterator<Row> rowIterator = AlexDAO.getActualRowIterator(tableIterators);
+        final String fileName = Constants.PREFIX + START_FILE_INDEX + TMP;
+        final File resultFile = new File(rootDir, fileName);
         FileTable.write(resultFile, rowIterator);
-        for (FileTable ft : fileTables) {
+        for (final FileTable ft : fileTables) {
             ft.close();
             ft.delete();
         }
         fileTables.clear();
-        String dbName = Constants.PREFIX + START_FILE_INDEX + Constants.SUFFIX;
-        File resultFileDb = new File(rootDir, dbName);
+        final String dbName = Constants.PREFIX + START_FILE_INDEX + Constants.SUFFIX;
+        final File resultFileDb = new File(rootDir, dbName);
         Files.move(resultFile.toPath(), resultFileDb.toPath(), StandardCopyOption.ATOMIC_MOVE);
         fileTables.add(new FileTable(resultFileDb));
     }
